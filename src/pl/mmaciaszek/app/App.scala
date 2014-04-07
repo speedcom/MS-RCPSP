@@ -7,7 +7,11 @@ import net.sf.mpxj.Task
 import scala.collection.JavaConverters._
 import core.eval.Eval
 import pl.mmaciaszek.env.Env
-import pl.mmaciaszek.task.TaskOperation
+import pl.mmaciaszek.project._
+import core.ProjectCloner
+import pl.mmaciaszek.alghoritm.greedy.GreedyAlghoritm
+import pl.mmaciaszek.alghoritm.greedy.TypeOptimization
+import pl.mmaciaszek.alghoritm.bnb.BranchAndBoundAlghoritm
 
 object FileOperation {
   def readDataFile(fileName: String) = Env.userDir + "\\test-data\\" + fileName
@@ -23,31 +27,45 @@ object App {
 
   def main(args: Array[String]): Unit = {
     
-    // READ FILE
-    val fileName = "10_3_5_3.mpp"
-    val dataFile = FileOperation  .readDataFile(fileName)
-    val project  = new MPPReader().read        (dataFile)
+    // CREATE PROJECTS
+    val dataFile                = FileOperation  .readDataFile     ("10_3_5_3.mpp")
+    val project                 = new MPPReader().read             (dataFile      )
+    val projectForGreedyAlgCOST = ProjectCloner  .createBaseProject(project, false)
+    val projectForGreedyAlgTIME = ProjectCloner  .createBaseProject(project, false)
+    val projectForBandBAlgCOST  = ProjectCloner  .createBaseProject(project, false)    
+    val projectForBandBAlgTIME  = ProjectCloner  .createBaseProject(project, false)
     
-      
-//    TaskOperation.iterationOverTaskByRelation(project)
-    TaskOperation.iterationOverAssignments   (project)
+    println("--- FIRST INFO ---")
+//    TaskIteration.iterationOverTasks                 (project)
+//    println("-----------------")
+    TaskIteration.iterationOverTaskByRelation        (project)
+    println("-----------------")
+//    TaskIteration.iterationOverAssignments           (project)
+//    println("-----------------")
+//    TaskIteration.iterationOverAssignmentsByResources(project)
+//    println("-----------------")
+//    TaskIteration.iterationOverAssignmentsByTasks    (project)
+//    println("-----------------")
+//    ProjectEvaluation.eval                  (project)
+//    ProjectEvaluation.getProjectCostInfo    (project)
+//    ProjectEvaluation.getProjectDurationInfo(project)
     
-    // SUMMARY TASK
-//    val projectTasks = project.getChildTasks()
-//    val task  		 = projectTasks  .get(0)
-//    val tasks		 = task.getChildTasks()
+//    println("--- AFTER GREEDY COST OPTIMIZATION ---")
+//    GreedyAlghoritm  .eval(projectForGreedyAlgCOST)(TypeOptimization.COST)
+//    ProjectEvaluation.getProjectCostInfo    (projectForGreedyAlgCOST)
+//  ProjectEvaluation.getProjectDurationInfo(projectForGreedyAlgCOST)
+//  TaskIteration.iterationOverAssignments           (projectForGreedyAlg)
+//  TaskIteration.iterationOverTaskByRelation        (projectForGreedyAlg)
+//  FileOperation.saveProjectFile(projectForGreedyAlg, "10_3_5_3_greedy.mpp")
     
-    // AGREGATED TASKS
-  // TaskOperation.listHierarchy(project)
-   
-   // ITERATION OVER TASKS RELATIONS
-   TaskOperation.iterationOverTaskByRelation(project)
-    
-//   val time_component_weight = 0.4
-//   val eval 				 = Eval..evalScheduling(project, time_component_weight)
-//   println("Wartosc funkcji oceny dla projektu: " + eval)
-  
-//  println("Czas trwania projektu: "    + Eval.getProjectDuration(project))
-//  println("Koszt realizacji projektu: "+ Eval.getProjectCost    (project))
+//    println("--- AFTER GREEDY TIME OPTIMIZATION ---")
+//    GreedyAlghoritm  .eval(projectForGreedyAlgTIME)(TypeOptimization.TIME)
+//    ProjectEvaluation.getProjectDurationInfo(projectForGreedyAlgTIME)
+     
+    println("--- AFTER BranchAndBound COST OPTIMIZATION ---")
+    BranchAndBoundAlghoritm.sortTasksByStartTime(project) foreach { task => 
+    	println(task.getName() + ", startDate = " + task.getStart())      
+   }
+    println("--- AFTER BandB TIME OPTIMIZATION ---")
   }
 }

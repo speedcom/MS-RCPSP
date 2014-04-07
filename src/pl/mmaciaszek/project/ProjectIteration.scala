@@ -1,10 +1,11 @@
-package pl.mmaciaszek.task
+package pl.mmaciaszek.project
 
 import net.sf.mpxj.ProjectFile
 import net.sf.mpxj.Task
+
 import scala.collection.JavaConverters._
 
-object TaskOperation {
+object TaskIteration {
    
  def iterationOverAssignments(project: ProjectFile) {
    val assignments = project.getAllResourceAssignments().asScala.toList
@@ -52,10 +53,13 @@ object TaskOperation {
    		val task = assignment.getTask()
    		println("\t" + task.getName())
    	}
-   	
    }
  }
  
+ def iterationOverTasks(project: ProjectFile) {
+   val tasks = project.getAllTasks().asScala.toList
+   tasks foreach { task => println("Zadanie: " + task.getName()) }
+ }
  def iterationOverTaskByRelation(project: ProjectFile) {
    val tasks = project.getAllTasks().asScala.toList
    tasks foreach { task => 
@@ -72,10 +76,6 @@ object TaskOperation {
      }
    }
  }
- def iterationOverTasks(project: ProjectFile) {
-   val tasks = project.getAllTasks().asScala.toList
-   tasks foreach { task => println("Zadanie: " + task.getName()) }
- }
  def iterationOverAgregatedTasks(project: ProjectFile) {
    val tasks = project.getChildTasks().asScala.toList
    tasks foreach { task => 		
@@ -86,7 +86,7 @@ object TaskOperation {
 	
 	def listHierarchy(task: Task, indent: String) {
 		val childs = task.getChildTasks().asScala.toList
-	   childs foreach { child => 
+	    childs foreach { child => 
 			println(indent + "Zadanie: " + child.getName())
 			listHierarchy(child, indent + " ")
 		}
