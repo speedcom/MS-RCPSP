@@ -9,13 +9,12 @@ import core.ProjectCloner
 import pl.mmaciaszek.project.ProjectEvaluation
 import pl.mmaciaszek.project.ProjectInitialization
 
-case object TypeOptimization {
-    lazy val COST = "COST"
-    lazy val TIME = "TIME"
+object TypeOptimization extends Enumeration {
+	val TIME, COST = Value
 }
 
 object GreedyAlghoritmOptimization {    
-  def findBestAssignment(project: ProjectFile, task: Task, resources: List[Resource])(implicit typeOptimization: String) = typeOptimization match {
+  def findBestAssignment(project: ProjectFile, task: Task, resources: List[Resource])(implicit typeOptimization: TypeOptimization.Value) = typeOptimization match {
     case TypeOptimization.COST => 
       var theBestResource = resources.head
       
@@ -25,7 +24,7 @@ object GreedyAlghoritmOptimization {
                     
       resources.tail foreach { resource =>
         val localProject      = ProjectCloner.createBaseProject(project, false)
-        val localProjectTask  = localProject .getTaskByID      (task.getID()      )       
+        val localProjectTask  = localProject .getTaskByID      (task.getID()  )       
         localProjectTask.addResourceAssignment(resource)
         
       	if(ProjectEvaluation.getProjectCost(mainProject) > ProjectEvaluation.getProjectCost(localProject)) {
@@ -58,14 +57,14 @@ object GreedyAlghoritmOptimization {
       }
       
       theBestResource
-    case _					   => 
+    case _					  => 
       throw new Exception("Wrong TypeOptimization")	
   }
 }
 
 object GreedyAlghoritm {
 	
-  def eval(project: ProjectFile)(implicit typeOptimization: String) {
+  def eval(project: ProjectFile)(implicit typeOptimization: TypeOptimization.Value) {
     val tasks = project.getAllTasks().asScala.toList
     tasks foreach { task => 
     	val resources      = SkillsUtilities.resourcesCapablePerformingTask(task).asScala.toList
@@ -75,8 +74,7 @@ object GreedyAlghoritm {
 	  	resourceAssign.setStart        (task          .getStart                     ())
 	  	resourceAssign.setWork         (task          .getDuration                  ())
 	  	resourceAssign.setRemainingWork(resourceAssign.getWork                      ())
-	  	resourceAssign.setCost         (resourceAssign.getWork()        .getDuration() * 
-	  									resource      .getStandardRate().getAmount  ())
+	  	resourceAssign.setCost         (resourceAssign.getWork().getDuration() * resource.getStandardRate().getAmount())
     }
     ProjectInitialization.packProject (project)
     ProjectInitialization.fixConflicts(project)

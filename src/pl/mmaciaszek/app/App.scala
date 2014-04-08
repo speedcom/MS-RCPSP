@@ -27,6 +27,8 @@ object App {
 
   def main(args: Array[String]): Unit = {
     
+    
+    
     // CREATE PROJECTS
     val dataFile                = FileOperation  .readDataFile     ("10_3_5_3.mpp")
     val project                 = new MPPReader().read             (dataFile      )
@@ -48,24 +50,24 @@ object App {
 //    println("-----------------")
 //    ProjectEvaluation.eval                  (project)
 //    ProjectEvaluation.getProjectCostInfo    (project)
-//    ProjectEvaluation.getProjectDurationInfo(project)
+    ProjectEvaluation.getProjectDurationInfo(project)
     
 //    println("--- AFTER GREEDY COST OPTIMIZATION ---")
-//    GreedyAlghoritm  .eval(projectForGreedyAlgCOST)(TypeOptimization.COST)
+//    GreedyAlghoritm  .eval                  (projectForGreedyAlgCOST)(TypeOptimization.COST)
 //    ProjectEvaluation.getProjectCostInfo    (projectForGreedyAlgCOST)
 //  ProjectEvaluation.getProjectDurationInfo(projectForGreedyAlgCOST)
 //  TaskIteration.iterationOverAssignments           (projectForGreedyAlg)
 //  TaskIteration.iterationOverTaskByRelation        (projectForGreedyAlg)
 //  FileOperation.saveProjectFile(projectForGreedyAlg, "10_3_5_3_greedy.mpp")
     
-//    println("--- AFTER GREEDY TIME OPTIMIZATION ---")
-//    GreedyAlghoritm  .eval(projectForGreedyAlgTIME)(TypeOptimization.TIME)
-//    ProjectEvaluation.getProjectDurationInfo(projectForGreedyAlgTIME)
+    println("--- AFTER GREEDY TIME OPTIMIZATION ---")
+    GreedyAlghoritm  .eval                  (projectForGreedyAlgTIME)(TypeOptimization.TIME)
+    ProjectEvaluation.getProjectDurationInfo(projectForGreedyAlgTIME)
      
-    println("--- AFTER BranchAndBound COST OPTIMIZATION ---")
-    BranchAndBoundAlghoritm.sortTasksByStartTime(project) foreach { task => 
-    	println(task.getName() + ", startDate = " + task.getStart())      
-   }
-    println("--- AFTER BandB TIME OPTIMIZATION ---")
+//    println("--- AFTER BranchAndBound COST OPTIMIZATION ---")
+//    BranchAndBoundAlghoritm.sortTasksByStartTime(project) foreach { task => 
+//    	println(task.getName() + ", startDate = " + task.getStart())      
+//   }
+//    println("--- AFTER BandB TIME OPTIMIZATION ---")
   }
 }
