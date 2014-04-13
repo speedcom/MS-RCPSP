@@ -70,11 +70,11 @@ object GreedyAlghoritm {
     	val resources      = SkillsUtilities.resourcesCapablePerformingTask(task).asScala.toList
     	val resource       = GreedyAlghoritmOptimization.findBestAssignment(project, task, resources)      	
     	val resourceAssign = task.addResourceAssignment(resource)
-	  	
-	  	resourceAssign.setStart        (task          .getStart                     ())
-	  	resourceAssign.setWork         (task          .getDuration                  ())
-	  	resourceAssign.setRemainingWork(resourceAssign.getWork                      ())
-	  	resourceAssign.setCost         (resourceAssign.getWork().getDuration() * resource.getStandardRate().getAmount())
+
+      resourceAssign.setStart(task.getStart())
+      resourceAssign.setWork(task.getDuration())
+      resourceAssign.setRemainingWork(resourceAssign.getWork())
+      resourceAssign.setCost(resourceAssign.getWork().getDuration() * resource.getStandardRate().getAmount())
     }
     ProjectInitialization.packProject (project)
     ProjectInitialization.fixConflicts(project)

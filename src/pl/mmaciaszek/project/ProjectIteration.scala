@@ -11,18 +11,19 @@ object TaskIteration {
    val assignments = project.getAllResourceAssignments().asScala.toList
    assignments foreach { assignment =>
    		
-    var msg	     = ("Przydzial: Zadanie= ")
-    val task     = Option(assignment.getTask    ())
-   	val resource = Option(assignment.getResource())
+    val msg	     = new StringBuffer("Przydzial: Zadanie= ")
+    
+    val task     = Option(assignment getTask    ())
+   	val resource = Option(assignment getResource())
    		
    	task match {
-      case Some(t) => msg += t.getName()  + " "
-      case None	   => msg += "(puste zadanie) "
+      case Some(t) => msg append t.getName()  + " "
+      case None	   => msg append "(puste zadanie) "
     }
     
     resource match {
-      case Some(r) => msg += r.getName()
-      case None    => msg += "(pusty zasob)"
+      case Some(r) => msg append r.getName()
+      case None    => msg append "(pusty zasob)"
     }
     
     println(msg)

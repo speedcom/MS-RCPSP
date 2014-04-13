@@ -27,10 +27,8 @@ object App {
 
   def main(args: Array[String]): Unit = {
     
-    
-    
     // CREATE PROJECTS
-    val dataFile                = FileOperation  .readDataFile     ("10_3_5_3.mpp")
+    val dataFile                = FileOperation  .readDataFile     ("15_3_5_3.mpp")
     val project                 = new MPPReader().read             (dataFile      )
     val projectForGreedyAlgCOST = ProjectCloner  .createBaseProject(project, false)
     val projectForGreedyAlgTIME = ProjectCloner  .createBaseProject(project, false)
@@ -40,34 +38,31 @@ object App {
     println("--- FIRST INFO ---")
 //    TaskIteration.iterationOverTasks                 (project)
 //    println("-----------------")
-    TaskIteration.iterationOverTaskByRelation        (project)
-    println("-----------------")
+//    TaskIteration.iterationOverTaskByRelation        (project)
+//    println("-----------------")
 //    TaskIteration.iterationOverAssignments           (project)
 //    println("-----------------")
 //    TaskIteration.iterationOverAssignmentsByResources(project)
 //    println("-----------------")
 //    TaskIteration.iterationOverAssignmentsByTasks    (project)
 //    println("-----------------")
-//    ProjectEvaluation.eval                  (project)
-//    ProjectEvaluation.getProjectCostInfo    (project)
+    
+    ProjectEvaluation.eval                  (project)
+    ProjectEvaluation.getProjectCostInfo    (project)
     ProjectEvaluation.getProjectDurationInfo(project)
     
-//    println("--- AFTER GREEDY COST OPTIMIZATION ---")
-//    GreedyAlghoritm  .eval                  (projectForGreedyAlgCOST)(TypeOptimization.COST)
-//    ProjectEvaluation.getProjectCostInfo    (projectForGreedyAlgCOST)
-//  ProjectEvaluation.getProjectDurationInfo(projectForGreedyAlgCOST)
-//  TaskIteration.iterationOverAssignments           (projectForGreedyAlg)
-//  TaskIteration.iterationOverTaskByRelation        (projectForGreedyAlg)
-//  FileOperation.saveProjectFile(projectForGreedyAlg, "10_3_5_3_greedy.mpp")
+    println("--- GREEDY ALGHORITM COST OPTIMIZATION ---")
+    val costEval = System.currentTimeMillis()
+    GreedyAlghoritm  .eval                  (projectForGreedyAlgCOST)(TypeOptimization.COST)
+    println("COST optimization time: " + (System.currentTimeMillis()-costEval))
+    ProjectEvaluation.getProjectCostInfo    (projectForGreedyAlgCOST)
+    ProjectEvaluation.getProjectDurationInfo(projectForGreedyAlgCOST)
     
-    println("--- AFTER GREEDY TIME OPTIMIZATION ---")
+    println("--- GREEDY ALGHORITM TIME OPTIMIZATION ---")
+    val timeEval = System.currentTimeMillis()
     GreedyAlghoritm  .eval                  (projectForGreedyAlgTIME)(TypeOptimization.TIME)
-    ProjectEvaluation.getProjectDurationInfo(projectForGreedyAlgTIME)
-     
-//    println("--- AFTER BranchAndBound COST OPTIMIZATION ---")
-//    BranchAndBoundAlghoritm.sortTasksByStartTime(project) foreach { task => 
-//    	println(task.getName() + ", startDate = " + task.getStart())      
-//   }
-//    println("--- AFTER BandB TIME OPTIMIZATION ---")
+    println("TIME optimization time: " + (System.currentTimeMillis()-timeEval))
+    ProjectEvaluation.getProjectCostInfo	(projectForGreedyAlgTIME)
+    ProjectEvaluation.getProjectDurationInfo(projectForGreedyAlgTIME)  
   }
-}
+ }
