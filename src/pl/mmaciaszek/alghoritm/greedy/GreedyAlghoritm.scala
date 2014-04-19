@@ -15,7 +15,8 @@ object TypeOptimization extends Enumeration {
 
 object GreedyAlghoritmOptimization {    
   def findBestAssignment(project: ProjectFile, task: Task, resources: List[Resource])(implicit typeOptimization: TypeOptimization.Value) = typeOptimization match {
-    case TypeOptimization.COST => 
+    
+  	case TypeOptimization.COST => 
       var theBestResource = resources.head
       
       var mainProject     = ProjectCloner.createBaseProject(project, false)
